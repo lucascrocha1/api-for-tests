@@ -38,7 +38,7 @@
         }
 
         [HttpDelete]
-        public async Task Delete([FromBody]Delete.Command command)
+        public async Task Delete(Delete.Command command)
         {
             await _mediator.Send(command);
         }
