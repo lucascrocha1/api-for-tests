@@ -7,6 +7,7 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Swashbuckle.AspNetCore.Swagger;
     using WebApi.Infra;
 
     public class Startup
@@ -36,6 +37,11 @@
             {
                 opts.AddPolicy("Dev", opt => opt.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials());
             });
+
+            services.AddSwaggerGen(opts =>
+            {
+                opts.SwaggerDoc("v1", new Info { Title = "API", Version = "v1" });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -52,6 +58,14 @@
             }
 
             app.UseHttpsRedirection();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(opts =>
+            {
+                opts.SwaggerEndpoint("/swagger/v1/swagger.json", "API");
+                opts.RoutePrefix = string.Empty;
+            });
 
             app.UseMvc(opts =>
             {
